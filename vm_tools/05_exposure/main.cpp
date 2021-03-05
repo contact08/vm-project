@@ -138,9 +138,10 @@ int main(int argc, char **argv)
 	moveWindow("histgram", rmat.cols+10, 0);
 #endif
 loop:
-	//do {
+	do {
 		n = sdk->GetImage((unsigned char*)lmat.data, (unsigned char*)rmat.data, 1); 
-	//} while (n != 0)
+		if (n && (n != -102)) printf("GetImage: %d\n", n);
+	} while (n != 0)
 		;
 	n = sdk->GetDepthInfo((float*)fdepth.data);
 	if (n) {
