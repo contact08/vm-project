@@ -1,4 +1,5 @@
 unsigned get_expval(void);
+unsigned get_exp_mode(void);
 int  exp2mnual(char *line);
 int  exp2single(char *line);
 int  exp2double(char *line);

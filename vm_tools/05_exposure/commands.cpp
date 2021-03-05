@@ -4,11 +4,17 @@
 extern ISCSDKLib	*sdk;
 
 static unsigned	expval = 0;
+static unsigned	mode = 1;
 unsigned set_exposure(unsigned n);
 
 unsigned get_expval(void)
 {
 	return expval;
+}
+
+unsigned get_exp_mode(void)
+{
+	return mode;
 }
 
 int  exp2mnual(char *line)
@@ -20,6 +26,7 @@ int  exp2mnual(char *line)
 	printf("exposure: %d\n", expval);
 	n = sdk->SetShutterControlMode(false);
 	check_if_0("SetShutterControlMode", n);
+	mode = 0;
 	return 0;
 }
 
@@ -30,6 +37,7 @@ int  exp2single(char *line)
 	n = sdk->SetShutterControlMode(1);
 	check_if_0("SetShutterControlMode", n);
 	expval = 0;
+	mode = 1;
 	return 0;
 }
 
@@ -40,6 +48,7 @@ int  exp2double(char *line)
 	n = sdk->SetShutterControlMode(2);
 	check_if_0("SetShutterControlMode", n);
 	expval = 0;
+	mode = 2;
 	return 0;
 }
 
@@ -50,6 +59,7 @@ int  exp2double_no_merge(char *line)
 	n = sdk->SetShutterControlMode(3);
 	check_if_0("SetShutterControlMode", n);
 	expval = 0;
+	mode = 3;
 	return 0;
 }
 

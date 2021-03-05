@@ -101,7 +101,7 @@ unsigned set_exposure(unsigned n)
 int main(int argc, char **argv)
 {
 	int		n;
-        unsigned	expval, npoints;
+        unsigned	npoints;
 	char		ch, cmd[2];
 
 	remove_ftdi_sio();
@@ -114,12 +114,8 @@ int main(int argc, char **argv)
 	read_camera_param();
 	get_size(&width, &height);
 
-	n = sdk->SetShutterControlMode(false);	// manual gain/exposure
+	n = sdk->SetShutterControlMode(1);	// single gain/exposure
 	check_if_0("SetShutterControlMode", n);
-
-	n = sdk->SetShutterControlMode(false);	// manual gain/exposure
-	check_if_0("SetShutterControlMode", n);
-	set_exposure(expval = 200);
 
 	n = sdk->SetAutoCalibration(1);		// auto mode
 	check_if_0("SetAutoCalibration", n);
@@ -156,7 +152,7 @@ loop:
 	imshow("original", rmat);
 	imshow("color", colmat);
 	show_hist(rmat, hplot);
-	mat_printf(hplot, 4, 20, "%d, %u", get_expval(), npoints);
+	mat_printf(hplot, 4, 20, "mode:%d, exp:%d, npoints:%u", get_exp_mode(), get_expval(), npoints);
 	imshow("histgram", hplot);
 	ch = waitKey(30);
 	if (ch == 0x1b) {
