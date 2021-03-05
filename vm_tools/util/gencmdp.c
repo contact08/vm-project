@@ -176,11 +176,11 @@ int main(int argc, char **argv)
 		}
 	}
 	fclose(ifp);
-	fprintf(ofp, " { \"%-6s\", (FP_LINE*)%-24s, ARG_LINE, \"%s\"},\n",
+	fprintf(ofp, " { \"%s\", (FP_LINE*)%-24s, ARG_LINE, \"%s\"},\n",
 			"?",
 			"help",
 			"help message");
-	fprintf(ofp, " { \"%-6s\", (FP_LINE*)%-24s, ARG_LINE, \"%s\"},\n",
+	fprintf(ofp, " { \"%s\", (FP_LINE*)%-24s, ARG_LINE, \"%s\"},\n",
 			"",
 			"0",
 			"");
@@ -189,4 +189,3 @@ int main(int argc, char **argv)
 	destroy_csv(ctx);
 	return 0;
 }
-
