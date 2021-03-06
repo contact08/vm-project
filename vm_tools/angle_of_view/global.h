@@ -1,0 +1,10 @@
+EXTRN ISCSDKLib	*sdk;
+EXTRN int	x[2], y[2], index_xy;
+EXTRN float	vdeg, hdeg;		
+EXTRN double	vview, hview;
+EXTRN int	dcm, hcm, vcm, *ptr_cm;
+EXTRN uchar	*red, *green, *blue;
+EXTRN int	maxcm, width, height;
+EXTRN Mat	lmat;
+EXTRN Mat	rmat;
+EXTRN Mat	colmat;

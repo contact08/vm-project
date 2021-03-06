@@ -1,0 +1,15 @@
+folder = ../angle_of_view/
+body = commands.cpp
+header = commands.h
+
+0, select_pt0, move point0
+1, select_pt1, move point1
+d, adj_dist, adjust distance
+y, adj_vsize, adjust vertical size
+x, adj_hsize, adjust horizontal size
+k, mv_up, move point up (like vim)
+j, mv_down, move point down (like vim)
+h, mv_left, move point left (like vim)
+l, mv_right, move point right (like vim)
++, inc_var, increment dist./size
+-, dec_var, decrement dist./size

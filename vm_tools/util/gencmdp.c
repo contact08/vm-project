@@ -178,8 +178,8 @@ int main(int argc, char **argv)
 	fclose(ifp);
 	fprintf(ofp, " { \"%s\", (FP_LINE*)%-24s, ARG_LINE, \"%s\"},\n",
 			"?",
-			"help",
-			"help message");
+			" help",
+			" help message");
 	fprintf(ofp, " { \"%s\", (FP_LINE*)%-24s, ARG_LINE, \"%s\"},\n",
 			"",
 			"0",

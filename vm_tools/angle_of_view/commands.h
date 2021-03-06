@@ -1,0 +1,12 @@
+int  select_pt0(char *line);
+int  select_pt1(char *line);
+int  adj_dist(char *line);
+int  adj_size(char *line);
+int  mv_up(char *line);
+int  mv_down(char *line);
+int  mv_left(char *line);
+int  mv_right(char *line);
+int  inc_var(char *line);
+int  dec_var(char *line);
+int  adj_vsize(char *line);
+int  adj_hsize(char *line);
