@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <ISCSDKLib.h>
+#include "libbasic.h"
+extern ISCSDKLib	*sdk;
+
+#define EXTRN extern
+#include "global.h"
+
+static unsigned	expval = 0;
+static unsigned	mode = 1;
+unsigned set_exposure(unsigned n);
+
+unsigned get_expval(void)
+{
+	return expval;
+}
+
+unsigned get_exp_mode(void)
+{
+	return mode;
+}
+
+int  exp2mnual(char *line)
+{
+	int	n;
+	HERE;
+	n = sdk->GetExposureValue(&expval);
+	check_if_0("GetExposureValue", n);
+	printf("exposure: %d\n", expval);
+	n = sdk->SetShutterControlMode(false);
+	check_if_0("SetShutterControlMode", n);
+	mode = 0;
+	return 0;
+}
+
+int  exp2single(char *line)
+{
+	int	n;
+	HERE;
+	n = sdk->SetShutterControlMode(1);
+	check_if_0("SetShutterControlMode", n);
+	expval = 0;
+	mode = 1;
+	return 0;
+}
+
+int  exp2double(char *line)
+{
+	int	n;
+	HERE;
+	n = sdk->SetShutterControlMode(2);
+	check_if_0("SetShutterControlMode", n);
+	expval = 0;
+	mode = 2;
+	return 0;
+}
+
+int  exp2double_no_merge(char *line)
+{
+	int	n;
+	HERE;
+	n = sdk->SetShutterControlMode(3);
+	check_if_0("SetShutterControlMode", n);
+	expval = 0;
+	mode = 3;
+	return 0;
+}
+
+int  incexp(char *line)
+{
+	HERE;
+	if ((expval += 10) > 480)
+		expval = 479;
+	expval = set_exposure(expval);
+	return 0;
+}
+
+int  decexp(char *line)
+{
+	HERE;
+	if ((expval -= 10) < 1)
+		expval = 2;
+	expval = set_exposure(expval);
+	return 0;
+}
+
+int  incnfil(char *line)
+{
+	if (noisethresh < 255) {
+		++noisethresh;
+		int n = sdk->SetNoiseFilter(noisethresh);
+		check_if_0("SetNoiseFilter", n);
+	}
+	return 0;
+}
+int  decnfil(char *line)
+{
+	if (noisethresh) {
+		--noisethresh;
+		int n = sdk->SetNoiseFilter(noisethresh);
+		check_if_0("SetNoiseFilter", n);
+	}
+	return 0;
+}
