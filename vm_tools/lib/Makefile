@@ -3,12 +3,15 @@ LIB = ar
 CPPFLAGS = -fPIC `pkg-config --cflags opencv4` -I../inc/
 LDFLAGS = `pkg-config --libs opencv4` -L./ -lISCSDKLibvm200 -lISCLibvm -lISCUSBLibvm -lftdi1
 
-all: libbasic.a
+all: libbasic.a libx3.a
 
-OBJS = libbasic.o
-SRCS = $(OBJS:.o=.cpp)
+#OBJS = libbasic.o
+#SRCS = $(OBJS:.o=.cpp)
 
-libbasic.a:  $(OBJS)
+libbasic.a: libbasic.o 
+	$(LIB) rcs $@ $^
+
+libx3.a:  libx3.o
 	$(LIB) rcs $@ $^
 
 %.o: %.c
@@ -24,8 +27,3 @@ depend:
 	makedepend -- -I.\ -- $(SRCS)
 
 # DO NOT DELETE
-
-libbasic.o: /usr/include/stdio.h /usr/include/stdlib.h /usr/include/string.h
-libbasic.o: /usr/include/unistd.h /usr/include/features.h
-libbasic.o: /usr/include/stdc-predef.h /usr/include/linux/types.h
-libbasic.o: /usr/include/linux/posix_types.h /usr/include/linux/stddef.h
