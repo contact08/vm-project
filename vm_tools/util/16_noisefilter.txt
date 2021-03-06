@@ -1,0 +1,12 @@
+folder = ../16_noisefilter/
+body = commands.cpp
+header = commands.h
+
+0, exp2mnual, manual exposure
+1, exp2single, single shutter
+2, exp2double, double shutter 
+3, exp2double_no_merge, double shutter for debug 
++, incexp, increment exposure value 
+-, decexp, decrement exposure value 
+s, incnfil, stronger noise filter
+w, decnfil, weaker noise filter

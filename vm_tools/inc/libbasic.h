@@ -19,6 +19,7 @@ using namespace cv;
 
 void remove_ftdi_sio(void);
 void check_if_0(const char *title, int n);
+void check_if_0_silent(const char *title, int n);
 int allocate_rgb_mem(int cm, uchar **red, uchar **green, uchar **blue);
 void draw_grid(Mat mat, int xdiv, int ydiv, int value);
 void mat_printf_color(Scalar col);

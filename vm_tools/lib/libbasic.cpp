@@ -51,6 +51,14 @@ void check_if_0(const char *title, int n)
 	}
 }
 
+void check_if_0_silent(const char *title, int n)
+{
+	if (n) {
+		printf("%s: error(%d)\n", title, n);
+		exit(1);
+	}
+}
+
 void draw_grid(Mat mat, int xdiv, int ydiv, int value)
 {
 	int	i, pos;

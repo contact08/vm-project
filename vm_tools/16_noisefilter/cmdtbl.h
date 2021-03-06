@@ -5,6 +5,8 @@ CMD cmdtbl[] = {
  { "3", (FP_LINE*) exp2double_no_merge    , ARG_LINE, " double shutter for debug "},
  { "+", (FP_LINE*) incexp                 , ARG_LINE, " increment exposure value "},
  { "-", (FP_LINE*) decexp                 , ARG_LINE, " decrement exposure value "},
+ { "s", (FP_LINE*) incnfil                , ARG_LINE, " stronger noise filter"},
+ { "w", (FP_LINE*) decnfil                , ARG_LINE, " weaker noise filter"},
  { "?", (FP_LINE*) help                   , ARG_LINE, " help message"},
- { "", (FP_LINE*)0                       , ARG_LINE, ""},
+ { "", (FP_LINE*)0                        , ARG_LINE, ""},
 };
