@@ -10,7 +10,8 @@
 #include <ISCSDKLib.h>
 
 #define HERE printf("@%d, %s, %s\n", __LINE__, __func__, __FILE__);
-#define PI ((double)3.141592654)
+
+#define PI ((double)3.14159265359)
 #define D2R(X) ((double)X*PI/180.0)
 #define R2D(X) ((double)X*180.0/PI)
 
@@ -33,3 +34,4 @@ float depth2distance(float depth);
 int depth2cm(float depth);
 int allocate_rgb_mem(int cm, uchar **red, uchar **green, uchar **blue);
 void dump_mem(void *ptr, int n);
+float get_vmpp2_hangle(void);

@@ -11,7 +11,11 @@
 using namespace cv;
 using namespace std;
 
+#include "libbasic.h"
 #include "libx3.h"
+
+static float	fpp2hangle;
+static float	fpp2vangle;
 
 // 'zero order hold' zooming
  void zoom(Mat from, Mat to)
@@ -80,4 +84,21 @@ void adj_contrast(Mat mat, double ratio)
 			*ptr++ = (unsigned char)newc;
 		}
 	}
+}
+
+void set_vmpp2_vangle(float vangle)
+{
+	fpp2vangle = vangle;
+	fpp2hangle = get_vmpp2_hangle();
+	printf("vangles:%f, hangle:%f\n", fpp2vangle, fpp2hangle);
+}
+
+float get_hangle(void)
+{
+	return fpp2hangle;
+}
+
+float get_vangle(void)
+{
+	return fpp2vangle;
 }

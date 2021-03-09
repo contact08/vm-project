@@ -8,6 +8,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <ISCSDKLib.h>
+#include "libbasic.h"
 
 using namespace cv;
 
@@ -19,6 +20,8 @@ static float	fBF;   //[pixel*m]
 static float	B;     // should be 10cm for VM2020
 static float	fViewAngle;
 static ISCSDKLib::CameraParamInfo	camera_param;
+static float	fpp2hangle;	// added for pp2
+static float	fpp2vangle;	// added for pp2
 
 void remove_ftdi_sio(void)
 {
@@ -140,6 +143,7 @@ int read_camera_param(void)
 	printf("nProductNumber: %d\n", camera_param.nProductNumber);
 	printf("nSerialNumber: %s\n", camera_param.nSerialNumber);
 	//printf("nFPGA_Version: %d\n", camera_param.nFPGA_Version);
+	get_vmpp2_hangle();
 	printf("\n\n");
 	return 0;
 }
@@ -232,5 +236,18 @@ void dump_mem(void *ptr, int n)
 		printf("%2x ", *((uchar*)ptr+i) & 255);
 	}
 	printf("\n");
+}
+
+float get_vmpp2_hangle(void)
+{
+	float	newangle, oldview, newview;
+	#define OLDW ((double)640)	// pp1
+	#define NEWW ((double)752)	// pp2
+	oldview = tan(D2R(fViewAngle/2.0));
+	newview = oldview * NEWW/OLDW;
+	newangle = R2D(atan(newview)) * 2.0;
+	printf("pp2 hangle: %f\n", newangle);
+	fpp2hangle = newangle;
+	return newangle;
 }
 

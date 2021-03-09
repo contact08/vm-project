@@ -1,0 +1,6 @@
+folder = ../18_ar_box/
+body = commands.cpp
+header = commands.h
+
+f, inc_z, increment distance to box (z axis) 
+n, dec_z, decrement distance to box (z axis) 

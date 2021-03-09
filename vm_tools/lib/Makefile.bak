@@ -11,7 +11,7 @@ SRCS = $(OBJS:.o=.cpp)
 libbasic.a: libbasic.o 
 	$(LIB) rcs $@ $^
 
-libx3.a:  libx3.o arbox.o
+libx3.a:  libx3.o
 	$(LIB) rcs $@ $^
 
 %.o: %.c
@@ -111,6 +111,4 @@ libx3.o: /usr/local/include/opencv4/opencv2/imgcodecs.hpp
 libx3.o: /usr/local/include/opencv4/opencv2/videoio.hpp
 libx3.o: /usr/local/include/opencv4/opencv2/imgproc.hpp
 libx3.o: /usr/local/include/opencv4/opencv2/./imgproc/segmentation.hpp
-libx3.o: ../inc/libbasic.h /usr/include/linux/types.h
-libx3.o: /usr/include/linux/posix_types.h /usr/include/linux/stddef.h
-libx3.o: ../inc/ISCSDKLib.h ../inc/libx3.h
+libx3.o: ../inc/libx3.h
