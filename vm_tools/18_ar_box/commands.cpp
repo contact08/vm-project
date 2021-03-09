@@ -2,24 +2,27 @@
 #include "libx3.h"
 
 extern double ground;
+extern double pfheight;
+
+static	double	*ptr = &ground;
 
 int  adj_g(char *line)
 {
-	ground += 0.05;
+	ptr = &ground;
 	return 0;
 }
-int  adj_z(char *line)
+int  adj_h(char *line)
 {
-	ground -= 0.05;
+	ptr = &pfheight;
 	return 0;
 }
 int  inc_var(char *line)
 {
-	ground += 0.02;
+	*ptr += 0.01;
 	return 0;
 }
 int  dec_var(char *line)
 {
-	ground -= 0.02;
+	*ptr -= 0.01;
 	return 0;
 }

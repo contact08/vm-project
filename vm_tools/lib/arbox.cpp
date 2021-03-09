@@ -13,8 +13,8 @@
 
 Scalar	lrec(-0.5, 3.4, 1.3, 1.5);	// x, z, width, height
 Scalar	hrec(-0.5, 3.4, 1.3, 1.5);	// x, z, width, height
-double	pfheight = -0.5;		// platform height (hlec-lrec) in meter
 static Point	pfcoord[8];
+double	pfheight = -0.5;		// platform height (hlec-lrec) in meter
 double	ground=((double)-0.4);
 
 static int	angle_initialized = 0;
@@ -61,10 +61,9 @@ void init_pf_coordinate(void)
 #endif
 }
 
-void write_platform(Mat mat, Scalar lrec, Scalar hrec, double pf_height)
+void write_platform(Mat mat, Scalar lrec, Scalar hrec)
 {
 	int	i, f, t;
-	pfheight = pf_height;
 	for (f = i = 0 ; i < 4 ; i++, ++f) {
 		t = f+1;
 		if  (t >= 4) t = 0;

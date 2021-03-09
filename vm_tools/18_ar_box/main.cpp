@@ -161,8 +161,7 @@ loop:
 
 	write_platform(colmat, 
 			Scalar(-0.5, 3.4, 1.3, 1.5),
-			Scalar(-0.5, 3.4, 1.3, 1.5),
-		       	(double)-0.2);
+			Scalar(-0.5, 3.4, 1.3, 1.5));
 	init_pf_coordinate();
 
 	imshow("color", colmat);

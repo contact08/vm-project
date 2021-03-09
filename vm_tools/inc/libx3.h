@@ -6,4 +6,4 @@ float get_vangle();
 float get_hangle();
 Point get_coord(double xm, double zm, double ym);
 void init_pf_coordinate(void);
-void write_platform(Mat mat, Scalar lrec, Scalar hrec, double pm_height);
+void write_platform(Mat mat, Scalar lrec, Scalar hrec);

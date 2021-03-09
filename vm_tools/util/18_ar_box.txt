@@ -3,6 +3,6 @@ body = commands.cpp
 header = commands.h
 
 g, adj_g, change ground level
-z, adj_z, change distance to ar_box
-f, inc_var, increment variable
-n, dec_var, decrement variable
+h, adj_h, change altitude of platform
++, inc_var, increment variable
+-, dec_var, decrement variable
