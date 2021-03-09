@@ -1,12 +1,25 @@
 #include "libbasic.h"
+#include "libx3.h"
 
-int  inc_z(char *line)
+extern double ground;
+
+int  adj_g(char *line)
 {
-	HERE;
+	ground += 0.05;
 	return 0;
 }
-int  dec_z(char *line)
+int  adj_z(char *line)
 {
-	HERE;
+	ground -= 0.05;
+	return 0;
+}
+int  inc_var(char *line)
+{
+	ground += 0.02;
+	return 0;
+}
+int  dec_var(char *line)
+{
+	ground -= 0.02;
 	return 0;
 }

@@ -11,11 +11,11 @@
 #include "libbasic.h"
 #include "libx3.h"
 
-Scalar	lrec(-0.5, 3.4, 1.0, 3.0);	// x, z, width, height
-Scalar	hrec(-0.5, 3.4, 1.0, 3.0);	// x, z, width, height
-double	pfheight = 0.1;		// platform height (hlec-lrec) in meter
+Scalar	lrec(-0.5, 3.4, 1.3, 1.5);	// x, z, width, height
+Scalar	hrec(-0.5, 3.4, 1.3, 1.5);	// x, z, width, height
+double	pfheight = -0.5;		// platform height (hlec-lrec) in meter
 static Point	pfcoord[8];
-static double	ground=((double)0.0);
+double	ground=((double)-0.4);
 
 static int	angle_initialized = 0;
 static float	hangle, vangle;
@@ -29,14 +29,16 @@ Point get_coord(double xm, double zm, double ym)
 	if (!angle_initialized) {
 		hangle = get_hangle();
 		vangle = get_vangle();
-		xfull = 2.0*zm*tan(D2R(hangle/2.0));
-		yfull = 2.0*zm*tan(D2R(vangle/2.0));
-		xcenter = xfull/2.0;
-		ycenter = yfull/2.0;
+
+		printf("hangle: %f, vangle: %f\n", hangle, vangle);
 		get_size(&width, &height);
 		angle_initialized = 1;
 		printf("parameters initialized\n");
 	}
+	xfull = 2.0*zm*tan(D2R(hangle/2.0));
+	yfull = 2.0*zm*tan(D2R(vangle/2.0));
+	xcenter = xfull/2.0;
+	ycenter = yfull/2.0;
 	x = (int)((double)width*(xm+xcenter))/xfull;
 	y = (int)((double)height*(ym+ycenter))/yfull;
 	return Point(x, y);
@@ -52,15 +54,21 @@ void init_pf_coordinate(void)
 	pfcoord[5] = get_coord(hrec.val[0], hrec.val[1]+hrec.val[3], ground-pfheight);	
 	pfcoord[6] = get_coord(hrec.val[0]+hrec.val[2], hrec.val[1]+hrec.val[3], ground-pfheight);	
 	pfcoord[7] = get_coord(hrec.val[0]+hrec.val[2], hrec.val[1], ground-pfheight);	
+#if 0	
+	for (int i = 0 ; i < 8 ; i++) {
+		printf("%d: %3d, %3d\n", i, pfcoord[i].x, pfcoord[i].y);
+	}
+#endif
 }
 
-void write_platform(Mat mat, Scalar lrec, Scalar hrec, double pm_height)
+void write_platform(Mat mat, Scalar lrec, Scalar hrec, double pf_height)
 {
 	int	i, f, t;
+	pfheight = pf_height;
 	for (f = i = 0 ; i < 4 ; i++, ++f) {
 		t = f+1;
 		if  (t >= 4) t = 0;
-		line(mat, pfcoord[f], pfcoord[t], Scalar(0,0,255), 1); 
+		line(mat, pfcoord[f], pfcoord[t], Scalar(255,255,0), 1); 
 	}
 	for (f = i = 0 ; i < 4 ; i++, ++f) {
 		t = f+1;

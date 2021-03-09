@@ -76,6 +76,26 @@ double put_horizontal_scale(Mat mat, float degree, int cm)
 	return fullw;
 }
 
+unsigned impose_depth(Mat colmat, Mat fdepth)
+{
+	int	x, y, cm;
+	unsigned	npoints = 0;
+	float	*fptr = (float*)fdepth.data;
+	//memset(count_cm, 0, maxcm*sizeof(float));
+	for (y = 0 ;  y < colmat.rows ; y++) {
+		for (x = 0 ;  x < colmat.cols ; x++) {
+			cm = depth2cm(*fptr++);
+			if (cm >= maxcm || cm <= 0) continue;
+			colmat.at<Vec3b>(y, x)[0] = blue[cm];
+			colmat.at<Vec3b>(y, x)[1] = green[cm];
+			colmat.at<Vec3b>(y, x)[2] = red[cm];
+			++npoints;
+			//++count_cm[cm];
+		}
+	}
+	return npoints;
+}
+
 const char *help =
 " f   | go far\n"
 " n   | come near\n"
@@ -84,25 +104,27 @@ const char *help =
 
 int main(int argc, char **argv)
 {
-	int	n, cm = 350;
+	int	n; //, cm = 350;
 	char	ch, cmd[2];
-	float	degree;		
-	double	view;
+	//float	degree;		
+	//double	view;
+	unsigned	npoints;
 
 	remove_ftdi_sio();
 	sdk = (ISCSDKLib*)new ISCSDKLib();
 	n = sdk->OpenISC();
 	check_if_0("OpenISC", n);
 	atexit(bye);
+	maxcm = allocate_rgb_mem(700, &red, &green, &blue);
 
 	read_camera_param();
 	maxcm = 1000;
 	get_size(&width, &height);
-	degree = get_vmpp2_hangle();		// estimated value from parameter
+	//degree = get_vmpp2_hangle();		// estimated value from parameter
 	set_vmpp2_vangle((float)20.231);	// measured by "angle_of_view"
 	printf("width: %d, height: %d\n", width, height);
 
-	n = sdk->SetShutterControlMode(true);	// auto gain/exposure
+	n = sdk->SetShutterControlMode(2);	// double shutter
 	check_if_0("SetShutterControlMode", n);
 
 	n = sdk->SetAutoCalibration(1);		// auto mode
@@ -114,26 +136,34 @@ int main(int argc, char **argv)
 	Mat lmat = Mat::zeros(height, width, CV_8UC1);
 	Mat rmat = Mat::zeros(height, width, CV_8UC1);
 	Mat colmat = Mat::zeros(height, width, CV_8UC3);
+	Mat fdepth = Mat::zeros(height, width, CV_32F);
 #if 1
 	namedWindow("color");
 	moveWindow("color", 0, 0);
 #endif
-	init_pf_coordinate();
+
 loop:
 	do {
 		n = sdk->GetImage((unsigned char*)lmat.data, (unsigned char*)rmat.data, 1); 
 	} while (n != 0)
 		;
+	n = sdk->GetDepthInfo((float*)fdepth.data);
+	if (n) {
+		printf("GetDepthInfo failed\n");
+		goto loop;
+	}
 	cvtColor(rmat, colmat, cv::COLOR_GRAY2RGB);
-	rectangle(colmat, Point(0, 0), Point(colmat.cols/2, 30), Scalar(0, 0, 0), -1);
+	//npoints = impose_depth(colmat, fdepth);
+	//rectangle(colmat, Point(0, 0), Point(colmat.cols/2, 30), Scalar(0, 0, 0), -1);
 	//view = put_horizontal_scale(colmat, degree, cm);
 	//mat_printf(colmat, 4, 20, "distance:%4dcm, view:%dcm",
 	//	     cm, (int)view);
 
 	write_platform(colmat, 
-			Scalar(-0.5, 3.4, 1.0, 3.0),
-			Scalar(-0.5, 3.4, 1.0, 3.0),
-		       	(double) 0.1);
+			Scalar(-0.5, 3.4, 1.3, 1.5),
+			Scalar(-0.5, 3.4, 1.3, 1.5),
+		       	(double)-0.2);
+	init_pf_coordinate();
 
 	imshow("color", colmat);
 	cmd[0] = ch = waitKey(30);
