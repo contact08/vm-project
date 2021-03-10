@@ -1,8 +1,7 @@
 #include "libbasic.h"
 #include "libx3.h"
 
-extern double ground;
-extern double pfheight;
+extern ARBOX *arbox;
 extern int impose;
 
 static	CUI_VAR	*var;
@@ -10,7 +9,7 @@ static	CUI_VAR	*var;
 CUI_VAR	cui_ground = {
 	"ground level in m",
 	CUI_DOUBLE,
-	(void*)(&ground),
+	(void*)(&arbox->ground),
 	0.1,
 	+2.0,	
 	-2.0,
@@ -19,7 +18,7 @@ CUI_VAR	cui_ground = {
 CUI_VAR	cui_altitude = {
 	"platform altitude in m",
 	CUI_DOUBLE,
-	(void*)(&pfheight),
+	(void*)&(arbox->altitude),
 	0.1,
 	+2.0,	
 	-2.0,
@@ -36,12 +35,18 @@ CUI_VAR	cui_impose = {
 
 int  adj_g(char *line)
 {
+	printf("ptr: %p\n", cui_ground.ptr);
+	cui_ground.ptr = &(arbox->ground);
+	printf("ptr: %p\n", cui_ground.ptr);
 	var = &cui_ground;
 	return 0;
 }
 
 int  adj_h(char *line)
 {
+	printf("ptr: %p\n", cui_altitude.ptr);
+	cui_altitude.ptr = &(arbox->altitude);
+	printf("ptr: %p\n", cui_altitude.ptr);
 	var = &cui_altitude;
 	return 0;
 }
@@ -49,6 +54,7 @@ int  adj_h(char *line)
 int  adj_m(char *line)
 {
 	var = &cui_impose;
+	inc_cui_var(var);
 	return 0;
 }
 

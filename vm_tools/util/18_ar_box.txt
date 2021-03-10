@@ -4,6 +4,6 @@ header = commands.h
 
 g, adj_g, change ground level
 h, adj_h, change altitude of platform
-i, adj_m, display mode 
+i, adj_m, impose depth or not 
 +, inc_var, increment variable
 -, dec_var, decrement variable

@@ -14,23 +14,27 @@ void inc_cui_var(CUI_VAR *var)
 {
 	switch(var->type) {
 	   case CUI_INT:
-		if (*(int*)(var->ptr) < (int)var->max) {
-			*(int*)var->ptr += (int)var->step;
+		*(int*)var->ptr += (int)var->step;
+		if (*(int*)(var->ptr) > (int)var->max) {
+			*(int*)var->ptr = (int)var->min;
 		}
 		break;
 	   case CUI_UINT:
-		if (*(unsigned*)(var->ptr) < (unsigned)var->max) {
-			*(unsigned*)var->ptr += (unsigned)var->step;
+		*(unsigned*)var->ptr += (unsigned)var->step;
+		if (*(unsigned*)(var->ptr) > (unsigned)var->max) {
+			*(unsigned*)var->ptr = (unsigned)var->min;
 		}
 		break;
 	   case CUI_DOUBLE:
-		if (*(double*)(var->ptr) < (double)var->max) {
-			*(double*)var->ptr += (double)var->step;
+		*(double*)var->ptr += (double)var->step;
+		if (*(double*)(var->ptr) > (double)var->max) {
+			*(double*)var->ptr = (double)var->min;
 		}
 		break;
 	   case CUI_FLOAT:
-		if (*(float*)(var->ptr) < (float)var->max) {
-			*(float*)var->ptr += (float)var->step;
+		*(float*)var->ptr += (float)var->step;
+		if (*(float*)(var->ptr) > (float)var->max) {
+			*(float*)var->ptr = (float)var->min;
 		}
 		break;
 	   default:	
@@ -42,23 +46,27 @@ void dec_cui_var(CUI_VAR *var)
 {
 	switch(var->type) {
 	   case CUI_INT:
-		if (*(int*)(var->ptr) > (int)var->min) {
-			*(int*)var->ptr -= (int)var->step;
+		*(int*)var->ptr -= (int)var->step;
+		if (*(int*)(var->ptr) < (int)var->min) {
+			*(int*)var->ptr = (int)var->max;
 		}
 		break;
 	   case CUI_UINT:
-		if (*(unsigned*)(var->ptr) > (unsigned)var->min) {
-			*(unsigned*)var->ptr -= (unsigned)var->step;
+		*(unsigned*)var->ptr -= (unsigned)var->step;
+		if (*(unsigned*)(var->ptr) < (unsigned)var->min) {
+			*(unsigned*)var->ptr = (unsigned)var->max;
 		}
 		break;
 	   case CUI_DOUBLE:
-		if (*(double*)(var->ptr) > (double)var->min) {
-			*(double*)var->ptr -= (double)var->step;
+		*(double*)var->ptr -= (double)var->step;
+		if (*(double*)(var->ptr) < (double)var->min) {
+			*(double*)var->ptr = (double)var->max;
 		}
 		break;
 	   case CUI_FLOAT:
-		if (*(float*)(var->ptr) > (float)var->min) {
-			*(float*)var->ptr -= (float)var->step;
+		*(double*)var->ptr -= (double)var->step;
+		if (*(float*)(var->ptr) < (float)var->min) {
+			*(float*)var->ptr = (float)var->max;
 		}
 		break;
 	   default:	

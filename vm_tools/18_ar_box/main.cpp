@@ -21,6 +21,7 @@ ISCSDKLib	*sdk = NULL;
 uchar	*red, *green, *blue;
 int	maxcm, width, height;
 int	impose;
+ARBOX	*arbox;
 
 void close_sdk(void)
 {
@@ -34,6 +35,7 @@ void bye(void)
 {
 	close_sdk();
 	destroyAllWindows();
+	if (arbox != NULL) destroy_arbox(arbox);
 }
 
 double put_horizontal_scale(Mat mat, float degree, int cm)
@@ -132,6 +134,11 @@ int main(int argc, char **argv)
 	Mat rmat = Mat::zeros(height, width, CV_8UC1);
 	Mat colmat = Mat::zeros(height, width, CV_8UC3);
 	Mat fdepth = Mat::zeros(height, width, CV_32F);
+
+	arbox = new_arbox();
+	set_arbox(arbox, Scalar(-0.5, 3.4, 1.3, 1.5), 0.2, 0.0);
+	adj_g("");
+
 #if 1
 	namedWindow("color");
 	moveWindow("color", 0, 0);
@@ -156,10 +163,7 @@ loop:
 	//mat_printf(colmat, 4, 20, "distance:%4dcm, view:%dcm",
 	//	     cm, (int)view);
 
-	write_platform(colmat, 
-			Scalar(-0.5, 3.4, 1.3, 1.5),
-			Scalar(-0.5, 3.4, 1.3, 1.5));
-	init_pf_coordinate();
+	write_platform(colmat, arbox);
 
 	imshow("color", colmat);
 	cmd[0] = ch = waitKey(30);
