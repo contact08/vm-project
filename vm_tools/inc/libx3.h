@@ -43,7 +43,7 @@ ARBOX *new_arbox(void);
 void destroy_arbox(ARBOX *ptr);
 void set_arbox(ARBOX *ptr, Scalar rec, double altitude, double ground);
 void init_pf_coordinate(ARBOX *ptr);
-void write_platform(Mat mat, ARBOX *ptr);
+void write_arbox(Mat mat, ARBOX *ptr);
 
 void zoom(Mat from, Mat to);
 void color_zoom(Mat from, Mat to);

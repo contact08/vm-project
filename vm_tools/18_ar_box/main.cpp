@@ -21,7 +21,8 @@ ISCSDKLib	*sdk = NULL;
 uchar	*red, *green, *blue;
 int	maxcm, width, height;
 int	impose;
-ARBOX	*arbox;
+int index_arbox;
+ARBOX	*arbox[2];
 
 void close_sdk(void)
 {
@@ -35,7 +36,8 @@ void bye(void)
 {
 	close_sdk();
 	destroyAllWindows();
-	if (arbox != NULL) destroy_arbox(arbox);
+	if (arbox[0] != NULL) destroy_arbox(arbox[0]);
+	if (arbox[1] != NULL) destroy_arbox(arbox[1]);
 }
 
 double put_horizontal_scale(Mat mat, float degree, int cm)
@@ -101,10 +103,8 @@ unsigned impose_depth(Mat colmat, Mat fdepth)
 
 int main(int argc, char **argv)
 {
-	int	n; //, cm = 350;
+	int	n;
 	char	ch, cmd[2];
-	//float	degree;		
-	//double	view;
 	unsigned	npoints;
 
 	remove_ftdi_sio();
@@ -135,8 +135,11 @@ int main(int argc, char **argv)
 	Mat colmat = Mat::zeros(height, width, CV_8UC3);
 	Mat fdepth = Mat::zeros(height, width, CV_32F);
 
-	arbox = new_arbox();
-	set_arbox(arbox, Scalar(-0.5, 3.4, 1.3, 1.5), 0.2, 0.0);
+	arbox[0] = new_arbox();
+	arbox[1] = new_arbox();
+	set_arbox(arbox[0], Scalar(-0.6, 3.4, 1.2, 1.5), 0.2, 0.1);
+	set_arbox(arbox[1], Scalar(-0.7, 3.6, 1.4, 1.5), 0.4, 0.1);
+	arbox[1]->color = Scalar(255,0,0);
 	adj_g("");
 
 #if 1
@@ -163,7 +166,7 @@ loop:
 	//mat_printf(colmat, 4, 20, "distance:%4dcm, view:%dcm",
 	//	     cm, (int)view);
 
-	write_platform(colmat, arbox);
+	write_arbox(colmat, arbox[index_arbox]);
 
 	imshow("color", colmat);
 	cmd[0] = ch = waitKey(30);

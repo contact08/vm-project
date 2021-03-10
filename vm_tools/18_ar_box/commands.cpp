@@ -1,15 +1,16 @@
 #include "libbasic.h"
 #include "libx3.h"
 
-extern ARBOX *arbox;
 extern int impose;
+extern int index_arbox;
+extern ARBOX *arbox[2];
 
 static	CUI_VAR	*var;
 
 CUI_VAR	cui_ground = {
 	"ground level in m",
 	CUI_DOUBLE,
-	(void*)(&arbox->ground),
+	(void*)(&arbox[0]->ground),
 	0.1,
 	+2.0,	
 	-2.0,
@@ -18,7 +19,7 @@ CUI_VAR	cui_ground = {
 CUI_VAR	cui_altitude = {
 	"platform altitude in m",
 	CUI_DOUBLE,
-	(void*)&(arbox->altitude),
+	(void*)&(arbox[0]->altitude),
 	0.1,
 	+2.0,	
 	-2.0,
@@ -35,18 +36,15 @@ CUI_VAR	cui_impose = {
 
 int  adj_g(char *line)
 {
-	printf("ptr: %p\n", cui_ground.ptr);
-	cui_ground.ptr = &(arbox->ground);
-	printf("ptr: %p\n", cui_ground.ptr);
+HERE;	
+	cui_ground.ptr = &(arbox[index_arbox]->ground);
 	var = &cui_ground;
 	return 0;
 }
 
 int  adj_h(char *line)
 {
-	printf("ptr: %p\n", cui_altitude.ptr);
-	cui_altitude.ptr = &(arbox->altitude);
-	printf("ptr: %p\n", cui_altitude.ptr);
+	cui_altitude.ptr = &(arbox[index_arbox]->altitude);
 	var = &cui_altitude;
 	return 0;
 }
@@ -54,6 +52,22 @@ int  adj_h(char *line)
 int  adj_m(char *line)
 {
 	var = &cui_impose;
+	inc_cui_var(var);
+	return 0;
+}
+
+CUI_VAR	cui_arbox = {
+	"current arbox",
+	CUI_INT,
+	(void*)&(index_arbox),
+	1,
+	1.0,	
+	0,
+};
+
+int  adj_b(char *line)
+{
+	var = &cui_arbox;
 	inc_cui_var(var);
 	return 0;
 }

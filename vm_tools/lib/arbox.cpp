@@ -83,14 +83,14 @@ void init_pf_coordinate(ARBOX *ptr)
 	pfcoord[5] = get_coord(hrec.val[0], hrec.val[1]+hrec.val[3], ground-altitude);	
 	pfcoord[6] = get_coord(hrec.val[0]+hrec.val[2], hrec.val[1]+hrec.val[3], ground-altitude);	
 	pfcoord[7] = get_coord(hrec.val[0]+hrec.val[2], hrec.val[1], ground-altitude);	
-#if 0	
+#if 0
 	for (int i = 0 ; i < 8 ; i++) {
 		printf("%d: %3d, %3d\n", i, pfcoord[i].x, pfcoord[i].y);
 	}
 #endif
 }
 
-void write_platform(Mat mat, ARBOX *ptr)
+void write_arbox(Mat mat, ARBOX *ptr)
 {
 	int	i, f, t;
 
@@ -103,7 +103,7 @@ void write_platform(Mat mat, ARBOX *ptr)
 	for (f = i = 0 ; i < 4 ; i++, ++f) {
 		t = f+1;
 		if  (t >= 4) t = 0;
-		line(mat, ptr->pfcoord[f+4], ptr->pfcoord[t+4], Scalar(255,255,0), 1); 
+		line(mat, ptr->pfcoord[f+4], ptr->pfcoord[t+4], ptr->color, 1); 
 	}
 	for (f = i = 0 ; i < 4 ; i++, ++f) {
 		t = f+4;
