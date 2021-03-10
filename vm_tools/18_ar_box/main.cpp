@@ -20,6 +20,7 @@ int cmd_proc(char *cmd);
 ISCSDKLib	*sdk = NULL;
 uchar	*red, *green, *blue;
 int	maxcm, width, height;
+int	impose;
 
 void close_sdk(void)
 {
@@ -96,12 +97,6 @@ unsigned impose_depth(Mat colmat, Mat fdepth)
 	return npoints;
 }
 
-const char *help =
-" f   | go far\n"
-" n   | come near\n"
-" ?   | show this help message\n"
-" ESC | exit application\n";
-
 int main(int argc, char **argv)
 {
 	int	n; //, cm = 350;
@@ -153,7 +148,9 @@ loop:
 		goto loop;
 	}
 	cvtColor(rmat, colmat, cv::COLOR_GRAY2RGB);
-	//npoints = impose_depth(colmat, fdepth);
+	if (impose) {
+		npoints = impose_depth(colmat, fdepth);
+	}
 	//rectangle(colmat, Point(0, 0), Point(colmat.cols/2, 30), Scalar(0, 0, 0), -1);
 	//view = put_horizontal_scale(colmat, degree, cm);
 	//mat_printf(colmat, 4, 20, "distance:%4dcm, view:%dcm",

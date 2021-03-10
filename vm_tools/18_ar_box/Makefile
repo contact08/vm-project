@@ -119,4 +119,4 @@ commands.o: /usr/local/include/opencv4/opencv2/imgcodecs.hpp
 commands.o: /usr/local/include/opencv4/opencv2/videoio.hpp
 commands.o: /usr/local/include/opencv4/opencv2/imgproc.hpp
 commands.o: /usr/local/include/opencv4/opencv2/./imgproc/segmentation.hpp
-commands.o: ../inc/ISCSDKLib.h
+commands.o: ../inc/ISCSDKLib.h ../inc/libx3.h

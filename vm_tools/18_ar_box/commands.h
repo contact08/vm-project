@@ -7,3 +7,4 @@ int  adj_z(char *line);
 int  inc_var(char *line);
 int  dec_var(char *line);
 int  adj_h(char *line);
+int  adj_m(char *line);

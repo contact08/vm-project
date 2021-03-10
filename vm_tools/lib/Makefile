@@ -11,7 +11,7 @@ SRCS = $(OBJS:.o=.cpp)
 libbasic.a: libbasic.o 
 	$(LIB) rcs $@ $^
 
-libx3.a:  libx3.o arbox.o
+libx3.a:  libx3.o arbox.o cui.o
 	$(LIB) rcs $@ $^
 
 %.o: %.c
