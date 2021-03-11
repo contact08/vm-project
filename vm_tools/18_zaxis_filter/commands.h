@@ -1,0 +1,14 @@
+unsigned get_expval(void);
+unsigned get_exp_mode(void);
+int  exp2mnual(char *line);
+int  exp2single(char *line);
+int  exp2double(char *line);
+int  exp2double_no_merge(char *line);
+int  incexp(char *line);
+int  decexp(char *line);
+int  incnfil(char *line);
+int  decnfil(char *line);
+int  set_near(char *line);
+int  set_far(char *line);
+int  inczdist(char *line);
+int  deczdist(char *line);

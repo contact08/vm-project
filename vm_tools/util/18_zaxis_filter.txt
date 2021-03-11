@@ -1,0 +1,8 @@
+folder = ../18_zaxis_filter/
+body = commands.cpp
+header = commands.h
+
+n, set_near, set near side distance of z (cm)
+f, set_far, set far side distance of z (cm)
++, inczdist, increment exposure value 
+-, deczdist, decrement exposure value 

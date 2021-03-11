@@ -1,0 +1,4 @@
+
+// create 2D array with 0
+vector <vector<int>>zmask(colmat.rows/8, vector<int>(colmat.cols/8, 0));
+++zmask[y>>3][x>>3];
