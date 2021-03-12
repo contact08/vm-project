@@ -9,3 +9,4 @@ int  dec_var(char *line);
 int  adj_h(char *line);
 int  adj_m(char *line);
 int  adj_b(char *line);
+int  adj_r(char *line);

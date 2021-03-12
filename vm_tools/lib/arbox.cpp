@@ -10,17 +10,12 @@
 #include "libbasic.h"
 #include "libx3.h"
 
-//Scalar	lrec(-0.5, 3.4, 1.3, 1.5);	// x, z, width, height
-//Scalar	hrec(-0.5, 3.4, 1.3, 1.5);	// x, z, width, height
-//static Point	pfcoord[8];
-//double	pfheight = -0.5;		// platform height (hlec-lrec) in meter
-//double	ground=((double)-0.4);
-
 static int	angle_initialized = 0;
 static float	hangle, vangle;
 static double	xfull, yfull;
 static double	xcenter, ycenter;
 static int	width, height;
+static int	rolling_degree;
 
 ARBOX *new_arbox(void)
 {
@@ -53,7 +48,6 @@ Point get_coord(double xm, double zm, double ym)
 	if (!angle_initialized) {
 		hangle = get_hangle();
 		vangle = get_vangle();
-
 		printf("hangle: %f, vangle: %f\n", hangle, vangle);
 		get_size(&width, &height);
 		angle_initialized = 1;
@@ -66,6 +60,11 @@ Point get_coord(double xm, double zm, double ym)
 	x = (int)((double)width*(xm+xcenter))/xfull;
 	y = (int)((double)height*(ym+ycenter))/yfull;
 	return Point(x, y);
+}
+
+void set_rolling(int degree)
+{
+	rolling_degree = degree;
 }
 
 void init_pf_coordinate(ARBOX *ptr)
@@ -83,12 +82,14 @@ void init_pf_coordinate(ARBOX *ptr)
 	pfcoord[5] = get_coord(hrec.val[0], hrec.val[1]+hrec.val[3], ground-altitude);	
 	pfcoord[6] = get_coord(hrec.val[0]+hrec.val[2], hrec.val[1]+hrec.val[3], ground-altitude);	
 	pfcoord[7] = get_coord(hrec.val[0]+hrec.val[2], hrec.val[1], ground-altitude);	
-#if 0
 	for (int i = 0 ; i < 8 ; i++) {
-		printf("%d: %3d, %3d\n", i, pfcoord[i].x, pfcoord[i].y);
+		double	rad = D2R(rolling_degree);
+		pfcoord[i].x =  pfcoord[i].x*cos(rad)+pfcoord[i].y*sin(rad);
+		pfcoord[i].y = -pfcoord[i].x*sin(rad)+pfcoord[i].y*cos(rad);
+		//printf("%d: %3d, %3d\n", i, pfcoord[i].x, pfcoord[i].y);
 	}
-#endif
 }
+
 
 void write_arbox(Mat mat, ARBOX *ptr)
 {
@@ -109,5 +110,29 @@ void write_arbox(Mat mat, ARBOX *ptr)
 		t = f+4;
 		line(mat, ptr->pfcoord[f], ptr->pfcoord[t], ptr->color, 1); 
 	}
+}
+
+void erase_arbox(Mat mat, ARBOX *ptr)
+{
+	int	i, f, t;
+	Scalar	backup;
+	backup = ptr->color;
+	ptr->color = Scalar(0,0,0);
+	init_pf_coordinate(ptr);
+	for (f = i = 0 ; i < 4 ; i++, ++f) {
+		t = f+1;
+		if  (t >= 4) t = 0;
+		line(mat, ptr->pfcoord[f], ptr->pfcoord[t], ptr->color, 5); 
+	}
+	for (f = i = 0 ; i < 4 ; i++, ++f) {
+		t = f+1;
+		if  (t >= 4) t = 0;
+		line(mat, ptr->pfcoord[f+4], ptr->pfcoord[t+4], ptr->color, 5); 
+	}
+	for (f = i = 0 ; i < 4 ; i++, ++f) {
+		t = f+4;
+		line(mat, ptr->pfcoord[f], ptr->pfcoord[t], ptr->color, 5); 
+	}
+	ptr->color = backup;
 }
 

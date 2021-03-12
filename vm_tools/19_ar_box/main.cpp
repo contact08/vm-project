@@ -15,14 +15,13 @@ using namespace std;
 #include "libbasic.h"
 #include "libx3.h"
 #include "commands.h"
+
+#define EXTRN
+#include "global.h"
+
 int cmd_proc(char *cmd);
 
 ISCSDKLib	*sdk = NULL;
-uchar	*red, *green, *blue;
-int	maxcm, width, height;
-int	impose;
-int index_arbox;
-ARBOX	*arbox[2];
 
 void close_sdk(void)
 {
@@ -101,6 +100,34 @@ unsigned impose_depth(Mat colmat, Mat fdepth)
 	return npoints;
 }
 
+void gen_mask_mat(Mat mask, ARBOX *ptr, Mat original)
+{
+	int	from, to, yes;
+	ptr->color = Scalar(255,255,255);
+	mask = 0;
+	write_arbox(mask, ptr);
+	for (int j = 0 ; j < mask.rows ; j++) {
+		yes = 0;
+		for (from = 0 ; from < mask.cols ; from++)
+			if (mask.at<uchar>(j, from)) {
+				++yes;
+				break;
+			}
+		for (to = mask.cols ; to >= 0 ; to--)
+			if (mask.at<uchar>(j, to)) {
+				++yes;
+				break;
+			}
+		if (yes == 2) {
+			for (int i = from ; i <= to ; i++) {
+				mask.at<uchar>(j, i) = original.at<uchar>(j, i);
+			}
+		}
+	}
+	Canny(mask, mask, 48, 96);
+	//erase_arbox(mask, ptr);
+}
+
 int main(int argc, char **argv)
 {
 	int	n;
@@ -130,10 +157,11 @@ int main(int argc, char **argv)
 	n = sdk->StartGrab(2);	// 2:depth , 3:calibrated 4: original 
 	check_if_0("StartGrab", n);
 
-	Mat lmat = Mat::zeros(height, width, CV_8UC1);
-	Mat rmat = Mat::zeros(height, width, CV_8UC1);
-	Mat colmat = Mat::zeros(height, width, CV_8UC3);
-	Mat fdepth = Mat::zeros(height, width, CV_32F);
+	lmat.create(height, width, CV_8UC1);
+	rmat.create(height, width, CV_8UC1);
+	mask.create(height, width, CV_8UC1);
+	colmat.create(height, width, CV_8UC3);
+	fdepth.create(height, width, CV_32F);
 
 	arbox[0] = new_arbox();
 	arbox[1] = new_arbox();
@@ -161,14 +189,13 @@ loop:
 	if (impose) {
 		npoints = impose_depth(colmat, fdepth);
 	}
-	//rectangle(colmat, Point(0, 0), Point(colmat.cols/2, 30), Scalar(0, 0, 0), -1);
-	//view = put_horizontal_scale(colmat, degree, cm);
-	//mat_printf(colmat, 4, 20, "distance:%4dcm, view:%dcm",
-	//	     cm, (int)view);
+	mat_printf(colmat, 4, 20, "rolling: %d degree", rolling_deg);
 
+	set_rolling(rolling_deg);
 	write_arbox(colmat, arbox[index_arbox]);
 
-	imshow("color", colmat);
+	gen_mask_mat(mask, arbox[index_arbox], rmat);
+	imshow("color", mask);
 	cmd[0] = ch = waitKey(30);
 	cmd[1] = '\0';
 	cmd_proc(cmd);

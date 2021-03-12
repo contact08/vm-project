@@ -1,9 +1,8 @@
 #include "libbasic.h"
 #include "libx3.h"
 
-extern int impose;
-extern int index_arbox;
-extern ARBOX *arbox[2];
+#define EXTRN extern
+#include "global.h"
 
 static	CUI_VAR	*var;
 
@@ -11,7 +10,7 @@ CUI_VAR	cui_ground = {
 	"ground level in m",
 	CUI_DOUBLE,
 	(void*)(&arbox[0]->ground),
-	0.1,
+	0.05,
 	+2.0,	
 	-2.0,
 };
@@ -20,7 +19,7 @@ CUI_VAR	cui_altitude = {
 	"platform altitude in m",
 	CUI_DOUBLE,
 	(void*)&(arbox[0]->altitude),
-	0.1,
+	0.05,
 	+2.0,	
 	-2.0,
 };
@@ -34,9 +33,17 @@ CUI_VAR	cui_impose = {
 	0.0,
 };
 
+CUI_VAR	cui_rolling = {
+	"set rolling angle of arbox",
+	CUI_INT,
+	(void*)(&rolling_deg),
+	1,
+	 180.0,	
+	-180.0,
+};
+
 int  adj_g(char *line)
 {
-HERE;	
 	cui_ground.ptr = &(arbox[index_arbox]->ground);
 	var = &cui_ground;
 	return 0;
@@ -81,5 +88,11 @@ int  inc_var(char *line)
 int  dec_var(char *line)
 {
 	dec_cui_var(var);
+	return 0;
+}
+
+int  adj_r(char *line)
+{
+	var = &cui_rolling;
 	return 0;
 }

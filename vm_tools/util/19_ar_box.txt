@@ -1,4 +1,4 @@
-folder = ../18_ar_box/
+folder = ../19_ar_box/
 body = commands.cpp
 header = commands.h
 
@@ -6,5 +6,6 @@ g, adj_g, change ground level
 h, adj_h, change altitude of platform
 b, adj_b, change arbox 
 i, adj_m, impose depth or not 
+r, adj_r, set rolling angle in degree
 +, inc_var, increment variable
 -, dec_var, decrement variable

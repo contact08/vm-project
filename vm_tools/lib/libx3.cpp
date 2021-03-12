@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <math.h>
 #include <iostream>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -101,4 +102,28 @@ float get_hangle(void)
 float get_vangle(void)
 {
 	return fpp2vangle;
+}
+
+void rotate_by_x(float *x, float *y, float *z, int degree)
+{
+	double	tmpy = *y, tmpz = *z;
+	double	rad = D2R(degree);
+	*y = (float)(tmpy*cos(rad) - tmpz*sin(rad));
+	*z = (float)(tmpy*sin(rad) + tmpz*cos(rad));
+}
+
+void rotate_by_y(float *x, float *y, float *z, int degree)
+{
+	double	tmpx = *x, tmpz = *z;
+	double	rad = D2R(degree);
+	*x = (float)(tmpx*cos(rad) + tmpz*sin(rad));
+	*z = (float)(tmpz*cos(rad) - tmpx*sin(rad));
+}
+
+void rotate_by_z(float *x, float *y, float *z, int degree)
+{
+	double	tmpx = *x, tmpy = *y;
+	double	rad = D2R(degree);
+	*x = (float)(tmpx*cos(rad) - tmpy*sin(rad));
+	*y = (float)(tmpx*sin(rad) + tmpy*cos(rad));
 }

@@ -42,8 +42,10 @@ typedef struct {
 ARBOX *new_arbox(void);
 void destroy_arbox(ARBOX *ptr);
 void set_arbox(ARBOX *ptr, Scalar rec, double altitude, double ground);
+void set_rolling(int degree);
 void init_pf_coordinate(ARBOX *ptr);
 void write_arbox(Mat mat, ARBOX *ptr);
+void erase_arbox(Mat mat, ARBOX *ptr);
 
 void zoom(Mat from, Mat to);
 void color_zoom(Mat from, Mat to);
@@ -54,3 +56,7 @@ float get_hangle();
 Point get_coord(double xm, double zm, double ym);
 void inc_cui_var(CUI_VAR *var);
 void dec_cui_var(CUI_VAR *var);
+
+void rotate_by_x(float *x, float *y, float *z, int degree);
+void rotate_by_y(float *x, float *y, float *z, int degree);
+void rotate_by_z(float *x, float *y, float *z, int degree);
