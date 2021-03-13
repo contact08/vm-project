@@ -42,6 +42,24 @@ CUI_VAR	cui_rolling = {
 	-180.0,
 };
 
+CUI_VAR	cui_pitching = {
+	"set pitcing angle of arbox",
+	CUI_INT,
+	(void*)(&pitching_deg),
+	1,
+	 50.0,	
+	-50.0,
+};
+
+CUI_VAR	cui_disp_mode = {
+	"change display image mode",
+	CUI_INT,
+	(void*)(&disp_mode),
+	1,
+	1.0,
+	0.0,
+};
+
 int  adj_g(char *line)
 {
 	cui_ground.ptr = &(arbox[index_arbox]->ground);
@@ -94,5 +112,18 @@ int  dec_var(char *line)
 int  adj_r(char *line)
 {
 	var = &cui_rolling;
+	return 0;
+}
+
+int  chg_mode(char *line)
+{
+	var = &cui_disp_mode;
+	inc_cui_var(var);
+	return 0;
+}
+
+int  adj_p(char *line)
+{
+	var = &cui_pitching;
 	return 0;
 }

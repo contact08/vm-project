@@ -170,7 +170,7 @@ int main(int argc, char **argv)
 	arbox[1]->color = Scalar(255,0,0);
 	adj_g("");
 
-#if 1
+#if 0
 	namedWindow("color");
 	moveWindow("color", 0, 0);
 #endif
@@ -189,13 +189,19 @@ loop:
 	if (impose) {
 		npoints = impose_depth(colmat, fdepth);
 	}
-	mat_printf(colmat, 4, 20, "rolling: %d degree", rolling_deg);
+	mat_printf(colmat, 4, 20, "rolling: %d, pitching: %d ",
+		rolling_deg, pitching_deg);
 
 	set_rolling(rolling_deg);
+	set_pitching(pitching_deg);
 	write_arbox(colmat, arbox[index_arbox]);
 
 	gen_mask_mat(mask, arbox[index_arbox], rmat);
-	imshow("color", mask);
+	if (disp_mode == 0) {
+		imshow("image", colmat);
+	} else {
+		imshow("image", mask);
+	}
 	cmd[0] = ch = waitKey(30);
 	cmd[1] = '\0';
 	cmd_proc(cmd);

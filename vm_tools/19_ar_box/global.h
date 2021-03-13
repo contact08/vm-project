@@ -9,4 +9,6 @@ EXTRN int	impose;
 EXTRN int index_arbox;
 EXTRN ARBOX	*arbox[2];
 EXTRN int rolling_deg;
+EXTRN int pitching_deg;
 EXTRN uchar *red, *green, *blue;
+EXTRN int	disp_mode;

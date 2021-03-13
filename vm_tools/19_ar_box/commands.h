@@ -10,3 +10,5 @@ int  adj_h(char *line);
 int  adj_m(char *line);
 int  adj_b(char *line);
 int  adj_r(char *line);
+int  chg_mode(char *line);
+int  adj_p(char *line);

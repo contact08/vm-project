@@ -16,6 +16,7 @@ static double	xfull, yfull;
 static double	xcenter, ycenter;
 static int	width, height;
 static int	rolling_degree;
+static int	pitching_degree;
 
 ARBOX *new_arbox(void)
 {
@@ -67,29 +68,50 @@ void set_rolling(int degree)
 	rolling_degree = degree;
 }
 
+void set_pitching(int degree)
+{
+	pitching_degree = degree;
+}
+
 void init_pf_coordinate(ARBOX *ptr)
 {
+	/*
+		val[0] : x
+		val[1] z x
+		val[2] width (dx)
+		val[3] height(dy)
+	*/
 	Scalar	lrec = ptr->lrec;
 	Scalar	hrec = ptr->hrec;
 	double	ground = ptr->ground;
 	double	altitude = ptr->altitude;
 	Point	*pfcoord = ptr->pfcoord;
-	pfcoord[0] = get_coord(lrec.val[0], lrec.val[1], ground);	
-	pfcoord[1] = get_coord(lrec.val[0], lrec.val[1]+lrec.val[3], ground);	
-	pfcoord[2] = get_coord(lrec.val[0]+lrec.val[2], lrec.val[1]+lrec.val[3], ground);	
-	pfcoord[3] = get_coord(lrec.val[0]+lrec.val[2], lrec.val[1], ground);	
-	pfcoord[4] = get_coord(hrec.val[0], hrec.val[1], ground-altitude);	
-	pfcoord[5] = get_coord(hrec.val[0], hrec.val[1]+hrec.val[3], ground-altitude);	
-	pfcoord[6] = get_coord(hrec.val[0]+hrec.val[2], hrec.val[1]+hrec.val[3], ground-altitude);	
-	pfcoord[7] = get_coord(hrec.val[0]+hrec.val[2], hrec.val[1], ground-altitude);	
+	ptr->z_in_m[0] = lrec.val[1];
+	ptr->z_in_m[3] = lrec.val[1];
+	ptr->z_in_m[1] = lrec.val[1]+lrec.val[3];
+	ptr->z_in_m[2] = lrec.val[1]+lrec.val[3];
+	ptr->z_in_m[4] = hrec.val[1];
+	ptr->z_in_m[7] = hrec.val[1];
+	ptr->z_in_m[5] = hrec.val[1]+hrec.val[3];
+	ptr->z_in_m[6] = hrec.val[1]+hrec.val[3];
+	pfcoord[0] = get_coord(lrec.val[0], ptr->z_in_m[0], ground);	
+	pfcoord[1] = get_coord(lrec.val[0], ptr->z_in_m[1], ground);	
+	pfcoord[2] = get_coord(lrec.val[0]+lrec.val[2], ptr->z_in_m[2], ground);	
+	pfcoord[3] = get_coord(lrec.val[0]+lrec.val[2], ptr->z_in_m[3], ground);	
+	pfcoord[4] = get_coord(hrec.val[0], ptr->z_in_m[4], ground-altitude);	
+	pfcoord[5] = get_coord(hrec.val[0], ptr->z_in_m[5], ground-altitude);	
+	pfcoord[6] = get_coord(hrec.val[0]+hrec.val[2], ptr->z_in_m[6], ground-altitude);	
+	pfcoord[7] = get_coord(hrec.val[0]+hrec.val[2], ptr->z_in_m[7], ground-altitude);	
+	double	rad = D2R(rolling_degree);
 	for (int i = 0 ; i < 8 ; i++) {
-		double	rad = D2R(rolling_degree);
 		pfcoord[i].x =  pfcoord[i].x*cos(rad)+pfcoord[i].y*sin(rad);
 		pfcoord[i].y = -pfcoord[i].x*sin(rad)+pfcoord[i].y*cos(rad);
-		//printf("%d: %3d, %3d\n", i, pfcoord[i].x, pfcoord[i].y);
+	}
+	rad = D2R(pitching_degree);
+	for (int i = 0 ; i < 8 ; i++) {
+		pfcoord[i].y += (int)(height*(tan(rad)/tan(D2R(hangle/2.0))));
 	}
 }
-
 
 void write_arbox(Mat mat, ARBOX *ptr)
 {
